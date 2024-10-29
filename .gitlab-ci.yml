@@ -1,0 +1,30 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  APP_PORT: "9090"  # Match this to the port configured in application.properties
+  JAR_FILE: "target/demo-0.0.1-SNAPSHOT.jar"  # Replace with the actual JAR file path
+
+# Step 1: Build the application
+build:
+  stage: build
+  script:
+    - echo "Building the Spring Boot application..."
+    - mvn clean install
+  artifacts:
+    paths:
+      - target/*.jar
+  only:
+    - main
+
+# Step 2: Deploy the application locally
+deploy:
+  stage: deploy
+  script:
+    - echo "Stopping any existing application instance..."
+    - pkill -f "$JAR_FILE" || true
+    - echo "Running the new application instance..."
+    - nohup java -jar $JAR_FILE --server.port=$APP_PORT
+  only:
+    - main
