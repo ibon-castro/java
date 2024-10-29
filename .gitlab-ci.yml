@@ -16,7 +16,7 @@ build:
     paths:
       - target/*.jar
   only:
-    - main
+    - master
 
 # Step 2: Deploy the application locally
 deploy:
@@ -27,4 +27,4 @@ deploy:
     - echo "Running the new application instance..."
     - nohup java -jar $JAR_FILE --server.port=$APP_PORT
   only:
-    - main
+    - master
