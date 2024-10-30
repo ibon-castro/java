@@ -29,7 +29,7 @@ pipeline {
         stage('Security scan') {
             steps {
                 echo "Running OWASP Dependency Checker..."
-                dependencyCheck additionalArguments: '--scan target/'
+                dependencyCheck odcInstallation: 'owdc', additionalArguments: '--scan target/'
             }
             post {
                 always {
