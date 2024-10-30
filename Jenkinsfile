@@ -26,6 +26,18 @@ pipeline {
             }
         }
 
+        stage('Security scan') {
+            steps {
+                echo "Running OWASP Dependency Checker..."
+                dependencyCheck additionalArguments: '--scan target/'
+            }
+            post {
+                always {
+                    dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+                }
+            }
+        }
+
         stage('Deploy') {
             steps {
                 echo "Stopping any existing application instance..."
