@@ -39,7 +39,7 @@ pipeline {
                 echo "Stopping any existing application instance..."
                 sh "pkill -f \"$JAR_FILE\" || true"
                 echo "Running the new application instance..."
-                sh "nohup java -jar $JAR_FILE --server.port=$APP_PORT &"
+                sh "nohup java -jar $JAR_FILE --server.port=$APP_PORT"
             }
         }
     }
