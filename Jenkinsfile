@@ -29,8 +29,16 @@ pipeline {
         stage('Test') {
             steps {
                 echo "Running Cucumber tests..."
-                sh 'mvn test -Dcucumber.options="--plugin html:target/cucumber-reports"'
-                cucumber 'target/cucumber-reports/*.html'
+                cucumber buildStatus: 'UNSTABLE',
+                    reportTitle: 'Report',
+                    fileIncludePattern: '**/*.json',
+                    trendsLimit: 10,
+                    classifications: [
+                        [
+                            'key': 'Browser',
+                            'value': 'Firefox'
+                        ]
+                    ]
             }
         }
 
