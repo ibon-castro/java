@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        APP_PORT = "9090"  // Match this to the port configured in application.properties
-        JAR_FILE = "target/demo-0.0.1-SNAPSHOT.jar"  // Replace with the actual JAR file path
+        APP_PORT = "9090"
+        JAR_FILE = "target/demo-0.0.1-SNAPSHOT.jar"
     }
 
     stages {
@@ -26,12 +26,20 @@ pipeline {
             }
         }
 
+        stage('Test') {
+            steps {
+                echo "Running Cucumber tests..."
+                sh 'mvn test'
+                cucumber 'target/cucumber-reports/cucumber-html-reports/*.html'
+            }
+        }
+
         stage('Deploy') {
             steps {
                 echo "Stopping any existing application instance..."
                 sh "pkill -f \"$JAR_FILE\" || true"
                 echo "Running the new application instance..."
-                sh "nohup java -jar $JAR_FILE --server.port=$APP_PORT"
+                sh "nohup java -jar $JAR_FILE --server.port=$APP_PORT &"
             }
         }
     }
