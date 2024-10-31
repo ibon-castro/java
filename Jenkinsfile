@@ -29,22 +29,11 @@ pipeline {
         stage('Test') {
             steps {
                 echo "Running Cucumber tests..."
-                sh 'mvn test'
-            }
-            post {
-                always {
-                    // Use the generated JSON report
-                    publishHTML([
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: true,
-                        keepAll: true,
-                        reportDir: 'target/cucumber-reports',
-                        reportFiles: 'cucumber.json',
-                        reportName: 'Cucumber Report'
-                    ])
-                }
+                sh 'mvn test -Dcucumber.options="--plugin html:target/cucumber-reports"'
+                cucumber 'target/cucumber-reports/*.html'
             }
         }
+
 
         stage('Deploy') {
             steps {
